@@ -1,0 +1,7 @@
+server.port: 5601
+vega.enableExternalUrls: true
+server.host: "{{ansible_fqdn}}"
+
+elasticsearch.hosts:
+  - http://{{ELASTIC_MASTER}}:9200
+  - http://{{ELASTIC_SLAVE}}:9200

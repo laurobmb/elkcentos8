@@ -1,0 +1,40 @@
+---
+- name: Instalando chaves
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Copiando repositorio elasticsearch.repo
+  copy:
+    src: ./files/elasticsearch.repo
+    dest: /etc/yum.repos.d/
+
+- name: Instalação do monitoramento
+  package: 
+    name: "{{item}}"
+    state: latest
+  with_items: "{{packages}}"
+
+- name: FILEBEAT config
+  template:
+    src: ./files/{{item}}.yml
+    dest: /etc/{{item}}/{{item}}.yml
+    backup: yes
+  with_items: "{{arquivos_de_configuracao}}"
+  notify:
+    - Restart auditbeat
+    - Restart filebeat
+    - Restart metricbeat
+
+- name: Instalando modulos
+  service:
+    name: "{{item}}"
+    state: started
+  with_items: "{{servicos}}"
+
+- name: ativando modulo system
+  shell: filebeat modules enable system
+
+- name: ativando mosulo audit
+  shell: filebeat modules enable auditd
+

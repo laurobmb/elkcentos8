@@ -1,0 +1,31 @@
+---
+# handlers file for Logstash
+- name: Restart nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: Restart kibana
+  ansible.builtin.service:
+    name: kibana
+    state: restarted
+    enabled: yes
+
+- name: Restart filebeat
+  ansible.builtin.service:
+    name: filebeat
+    state: restarted
+    enabled: yes
+
+- name: Restart metricbeat
+  ansible.builtin.service:
+    name: metricbeat
+    state: restarted
+    enabled: yes
+
+- name: Restart Firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: reloaded
+    enabled: yes

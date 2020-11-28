@@ -1,0 +1,13 @@
+---
+
+- name: Restart ElasticSearch
+  ansible.builtin.service:
+    name: elasticsearch
+    state: restarted
+    enabled: yes
+
+- name: Restart Firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: reloaded
+    enabled: yes

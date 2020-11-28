@@ -1,0 +1,11 @@
+SRV_ELASTIC: "{{ansible_hostname}}"
+
+PACOTES:
+  - "elasticsearch"
+  - "python36"
+  - "vim"
+  - "bash-completion"
+  - "java-11-openjdk-devel"
+
+ansible_python_interpreter: /usr/bin/python3.6
+

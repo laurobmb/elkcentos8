@@ -1,0 +1,25 @@
+---
+
+- name: importando key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: install java
+  dnf:
+    name: java-1.8.0-openjdk
+    state: present
+
+- name: Copiando repositorio logstash.repo
+  copy:
+    src: ../files/logstash.repo
+    dest: /etc/yum.repos.d/     
+
+- name: install packages
+  package:
+    name: "{{item}}"
+    state: latest
+  notify: Restart Logstash
+  with_items: "{{packages}}"
+
+

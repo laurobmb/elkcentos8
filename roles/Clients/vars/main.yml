@@ -1,0 +1,17 @@
+---
+packages:
+  - "java"
+  - "vim"
+  - "filebeat"
+  - "auditbeat"
+  - "metricbeat"
+
+arquivos_de_configuracao:
+  - filebeat
+  - auditbeat
+  - metricbeat
+
+servicos:
+  - filebeat
+  - auditbeat
+  - metricbeat

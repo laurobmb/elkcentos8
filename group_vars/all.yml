@@ -1,0 +1,11 @@
+---
+domain: conectado.local
+cluster_name: BlackTeam001
+ELASTIC_MASTER: "172.1.12.128"
+ELASTIC_SLAVE:  "172.1.12.210"
+
+users:
+  - { user: admin, password: 1q2w3e }
+  - { user: lauro, password: 1q2w3e }
+
+

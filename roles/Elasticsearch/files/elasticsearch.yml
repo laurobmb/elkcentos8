@@ -1,0 +1,7 @@
+discovery.type: single-node
+cluster.name: "{{ansible_hostname}}"
+node.name: "{{ansible_fqdn}}"
+path.data: "/var/lib/elasticsearch"
+path.logs: "/var/log/elasticsearch"
+network.host: "{{SRV_ELASTIC}}"
+http.port: 9200

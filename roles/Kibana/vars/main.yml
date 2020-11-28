@@ -1,0 +1,12 @@
+---
+
+packages:
+  - "java"
+  - "kibana"
+  - "vim"
+  - "nginx"
+  - "metricbeat"
+  - "heartbeat-elastic"
+  - "filebeat"
+  - "auditbeat"          
+  - "rsync"

@@ -1,0 +1,19 @@
+[elastic]
+elastic_001 ansible_host=172.1.12.128
+elastic_002 ansible_host=172.1.12.210
+
+[elk_cluster:children]
+elastic
+
+[logstach_server]
+logstach_001 ansible_host=172.1.12.25
+
+[kibana_server]
+kibanna_server ansible_host=172.1.12.24
+
+[monitoring_clients]
+logstach_001 ansible_host=172.1.12.25
+
+[all:vars]
+ansible_user=root
+ansible_port=22

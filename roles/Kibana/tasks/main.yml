@@ -1,0 +1,118 @@
+---
+
+- name: Selinux config NGINX
+  shell: "setsebool -P httpd_can_network_connect 1"
+
+- name: Trocando nome da instancia  
+  hostname:
+    name: kibana
+
+- name: Chave do repo artifacts
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Copiando repositorio kibana.repo
+  copy:
+    src: ./files/kibana.repo
+    dest: /etc/yum.repos.d/
+
+- name: Instalação de repositorio EPEL
+  yum:
+    name: epel-release
+    state: latest
+
+- name: Instalação de pacotes para o KIBANA
+  package: 
+    name: "{{item}}"
+    state: latest
+  with_items: "{{packages}}"
+
+- name: Instalando PIPs
+  pip:
+    state: present
+    name: 
+      - passlib
+      - pyOpenSSL
+
+- name: NGINX kibana
+  template:
+    src: ./files/kibana.conf
+    dest: /etc/nginx/conf.d/kibana.conf
+    backup: yes
+  notify: Restart nginx
+
+- name: Coppiando arquivo do kibana
+  template:
+    src: ./files/kibana.yml
+    dest: /etc/kibana/kibana.yml
+    backup: yes
+  notify: Restart kibana
+
+- name: Gerando htpasswd
+  htpasswd:
+    path: /etc/nginx/htpasswd.users
+    name: "{{item.user}}"
+    password: "{{item.password}}"
+    owner: root
+    group: nginx
+    mode: 0640
+  notify: Restart nginx
+  with_items:
+    - "{{users}}"
+
+- name: Ensure directory exists for local self-signed TLS certs.
+  file:
+    path: /etc/ssl/{{ ansible_fqdn }}
+    state: directory
+  notify: Restart nginx
+
+- name: Generate an OpenSSL private key.
+  openssl_privatekey:
+    path: /etc/ssl/{{ ansible_fqdn }}/privkey.pem
+  notify: Restart nginx
+
+- name: Generate an OpenSSL CSR.
+  openssl_csr:
+    path: /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.csr
+    privatekey_path: /etc/ssl/{{ ansible_fqdn }}/privkey.pem
+    common_name: "{{ ansible_fqdn }}"
+    country_name: BR
+    state_or_province_name: Pernambuco
+    locality_name: Recife
+    organization_name: suporteAV
+    organizational_unit_name: NGSI
+    email_address: laurobmb@gmail.com
+  notify: Restart nginx
+
+- name: Generate a Self Signed OpenSSL certificate.
+  openssl_certificate:
+    path: /etc/ssl/{{ ansible_fqdn }}/fullchain.pem
+    privatekey_path: /etc/ssl/{{ ansible_fqdn }}/privkey.pem
+    csr_path: /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.csr
+    provider: selfsigned
+  notify: Restart nginx
+
+- name: Ativando modulos do FILEBEAT
+  shell: filebeat modules enable system
+
+- name: Ativando modulos do iptables
+  shell: filebeat modules enable iptables
+
+- name: habilitando firewall 
+  firewalld:
+    port: "{{item}}"
+    permanent: true
+    state: enabled
+  with_items:
+    - 5601/tcp
+    - 80/tcp
+    - 443/tcp
+  notify: Restart Firewalld
+  ignore_errors: true
+
+- name: setup dashboad metricbeat
+  shell: metricbeat setup --dashboards -E setup.kibana.host={{ansible_default_ipv4.address}}:5601
+
+- name: setup dashboad auditbeat
+  shell: auditbeat setup --dashboards -E setup.kibana.host={{ansible_default_ipv4.address}}:5601

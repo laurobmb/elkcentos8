@@ -1,0 +1,12 @@
+cluster.name: "{{cluster_name}}"
+node.name: "{{ansible_hostname}}"
+node.master: false
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+network.host: "{{ansible_default_ipv4.address}}"
+discovery.seed_hosts: ["127.0.0.1", "[::1]","{{ELASTIC_MASTER}}","{{ELASTIC_SLAVE}}"]
+cluster.initial_master_nodes: ["{{ELASTIC_MASTER}}"]
+network.publish_host: "{{ansible_default_ipv4.address}}"
+node.data: true
+http.port: 9200
+#bootstrap.mlockall: true

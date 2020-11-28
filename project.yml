@@ -1,0 +1,24 @@
+--- 
+- hosts: elk_cluster
+  become: yes
+  tags: elasticsearch
+  roles:
+    - Elasticsearch
+
+- hosts: logstach_server
+  become: yes
+  tags: logstash
+  roles:
+    - Logstash    
+
+- hosts: kibana_server
+  become: yes
+  tags: kibana
+  roles:
+    - Kibana    
+
+- hosts: monitoring_clients
+  become: yes
+  tags: monitoring_clients
+  roles:
+    - Clients    

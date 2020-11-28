@@ -1,0 +1,138 @@
+---
+- name: Coletetando memoria do sistema 
+  debug:
+    msg: "{{ ansible_memtotal_mb * 80 / 100 }}"
+  register: memoria
+
+- name: debug
+  debug:
+    msg: "{{ memoria.msg | int | abs   }}"
+
+- name: Alterando memoria do JAVA XMS
+  replace:
+    path: /etc/elasticsearch/jvm.options
+    regexp: '^-Xms1g'
+    replace: "-Xms{{ memoria.msg | int | abs  }}m"
+    backup: yes
+  notify: Restart ElasticSearch
+
+- name: Alterando memoria do JAVA XMX
+  replace:
+    path: /etc/elasticsearch/jvm.options
+    regexp: '^-Xmx1g'
+    replace: "-Xmx{{ memoria.msg | int | abs }}m"
+    backup: yes
+  notify: Restart ElasticSearch
+
+- name: Desabilitando a SWAP
+  shell: "swapoff -a"
+
+- name: Alterando FSTAB
+  replace:
+    path: /etc/fstab
+    regexp: '(.*swap*)'
+    replace: '#\1'
+    backup: yes
+
+
+- name: ansible_all_ipv4_addresses
+  debug:
+    msg: o endereço ipv4 é {{ansible_all_ipv4_addresses}} ou {{ansible_default_ipv4.address}}
+
+- name: Trocando nome da instancia master 
+  hostname:
+    name: elasticsearch_master
+  when: ELASTIC_MASTER == ansible_default_ipv4.address
+
+- name: Trocando nome da instancia slave
+  hostname:
+    name: elasticsearch_slave
+  when: ELASTIC_SLAVE == ansible_default_ipv4.address
+
+- name: importando key
+  rpm_key:
+    state: present
+    key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Copiando repositorio elasticsearch.repo
+  copy:
+    src: ../files/elasticsearch.repo
+    dest: /etc/yum.repos.d/     
+
+- name: Instalação de repositorio EPEL
+  dnf:
+    name: epel-release
+    state: present
+
+- name: Instalação de pacotes para o ELASTICSEARCH
+  dnf:
+    name: "{{PACOTES}}"
+    state: latest
+
+- name: Instalando PIP passlib
+  pip:
+    state: present
+    name:
+      - passlib
+      - pyOpenSSL
+
+- name: Copy file YAML to elasticsearch master
+  template:
+    src: ./files/elastic_master.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    backup: yes
+  when: ELASTIC_MASTER == ansible_default_ipv4.address
+  notify: Restart ElasticSearch
+
+- name: Copy file YAML to elasticsearch slave
+  template:
+    src: ./files/elastic_slave.yml
+    dest: /etc/elasticsearch/elasticsearch.yml
+    backup: yes
+  when: ELASTIC_SLAVE == ansible_default_ipv4.address
+  notify: Restart ElasticSearch
+
+- name: Copy default elasticsearch
+  copy:
+    src: ./files/default_elasticsearch
+    dest: /etc/default/elasticsearch
+
+- name: Ensure directory exists for local self-signed TLS certs.
+  file:
+    path: /etc/ssl/{{ ansible_fqdn }}
+    state: directory
+
+- name: Generate an OpenSSL private key.
+  openssl_privatekey:
+    path: /etc/ssl/{{ ansible_fqdn }}/privkey.pem
+
+- name: Generate an OpenSSL CSR.
+  openssl_csr:
+    path: /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.csr
+    privatekey_path: /etc/ssl/{{ ansible_fqdn }}/privkey.pem
+    common_name: "{{ ansible_fqdn }}"
+    country_name: BR
+    state_or_province_name: Pernambuco
+    locality_name: Recife
+    organization_name: suporteAV
+    organizational_unit_name: NGSI
+    email_address: laurobmb@gmail.com
+
+- name: Generate a Self Signed OpenSSL certificate.
+  openssl_certificate:
+    path: /etc/ssl/{{ ansible_fqdn }}/fullchain.pem
+    privatekey_path: /etc/ssl/{{ ansible_fqdn }}/privkey.pem
+    csr_path: /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.csr
+    provider: selfsigned
+
+- name: habilitando firewall 
+  firewalld:
+    port: "{{item}}"
+    permanent: true
+    state: enabled
+  with_items:
+    - 9200/tcp
+    - 9300/tcp
+  notify: Restart Firewalld
+  ignore_errors: true
+
