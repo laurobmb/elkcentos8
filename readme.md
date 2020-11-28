@@ -4,7 +4,7 @@
 
 O servidor do Elasticsearch é instalado em cluster, logo são necessários no minimo dois servidores para iniciar o projeto.
 
-> Alterar endereços IP no inventory.txt com os endereços do elasticsearch master end slave 
+> Alterar endereços IP no [inventory.txt](https://github.com/laurobmb/elkcentos8/blob/main/inventory.txt) com os endereços do elasticsearch master end slave 
 
 > Alterar também os endereços IP do elasticsearch master end slave no all.yml
 
