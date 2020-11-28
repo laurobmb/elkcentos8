@@ -6,14 +6,14 @@ O servidor do Elasticsearch é instalado em cluster, logo são necessários no m
 
 > Alterar endereços IP no [inventory.txt](https://github.com/laurobmb/elkcentos8/blob/main/inventory.txt) com os endereços do elasticsearch master end slave 
 
-> Alterar também os endereços IP do elasticsearch master end slave no [all.yml](https://github.com/laurobmb/elkcentos8/blob/main/all.yml)
+> Alterar também os endereços IP do elasticsearch master end slave no [all.yml](https://github.com/laurobmb/elkcentos8/blob/main/group_vars/all.yml)
 
 ## Install Kibana
 
 A role do Kibana instala também um Nginx para sevir como PROXY de acesso ao KIBANA. 
 
 
-> Alterar o arquivo [all.yml](https://github.com/laurobmb/elkcentos8/blob/main/all.yml) para informar o [domínio](https://github.com/laurobmb/elkcentos8/blob/main/all.yml) do PROXY NGINX e ainda informar os usuários e senhas iniciais do acesso.
+> Alterar o arquivo [all.yml](https://github.com/laurobmb/elkcentos8/blob/main/group_vars/all.yml) para informar o [domínio](https://github.com/laurobmb/elkcentos8/blob/main/group_vars/all.yml) do PROXY NGINX e ainda informar os usuários e senhas iniciais do acesso.
 
 ## Install Logstash
 
