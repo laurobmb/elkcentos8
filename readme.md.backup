@@ -32,10 +32,19 @@ Informar o endereço IP dos clientes no inventory.txt
 
 # Comandos 
 
-* ansible-playbook -i inventory.txt project.yml --tags "elasticsearch"
-* ansible-playbook -i inventory.txt project.yml --tags "monitoring_clients"
-* ansible-playbook -i inventory.txt project.yml --tags "kibana"
-* ansible-playbook -i inventory.txt project.yml --tags="logstash"
+ 9944  ansible-playbook -i inventory.txt project.yml --tags "elasticsearch"\n
+ 9950  ansible-playbook /home/lpgomes/MEGA/ansible/dnssec/deploy.yaml
+ 9969  ansible-playbook -i inventory.txt project.yml --tags "monitoring_clients"\n
+ 9974  ansible-playbook -i inventory.txt project.yml --tags "kibana"\n
+ 9990  ansible-playbook -i hosts.txt users.yml -T 2 -l poc
+ 9996  ansible-playbook -i inventory.txt project.yml -vv\n
+ 9997  ansible-playbook -i inventory.txt project.yml --tags="elasticsearch" -vvv\n
+ 9999  ansible-playbook -i inventory.txt project.yml\n
+10001  ansible-playbook -i inventory.txt project.yml --tags="elasticsearch"\n
+10002  ansible-playbook -i inventory.txt project.yml\n
+10003  ansible-playbook -i inventory.txt project.yml --tags="kibana"\n
+10010  ansible-playbook -i inventory.txt project.yml --tags="kibana"\n
+10011  ansible-playbook -i inventory.txt project.yml --tags="monitoring_clients"\n
 
 
 # Referencia
