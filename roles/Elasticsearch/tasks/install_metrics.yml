@@ -1,0 +1,20 @@
+---
+
+- name: Install metrics
+  package:
+      name: metrics
+      state: present
+
+- name: Start metrics
+  systemd:
+    name: metrics
+    state: started
+
+- name: Active monitoring elastic
+  shell: metricbeat modules enable elasticsearch-xpack
+
+- name: Start metrics
+  systemd:
+    name: metrics
+    state: restarted
+    enabled: yes

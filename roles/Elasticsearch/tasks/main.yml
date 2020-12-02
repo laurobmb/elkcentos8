@@ -8,21 +8,6 @@
   debug:
     msg: "{{ memoria.msg | int | abs   }}"
 
-- name: Alterando memoria do JAVA XMS
-  replace:
-    path: /etc/elasticsearch/jvm.options
-    regexp: '^-Xms1g'
-    replace: "-Xms{{ memoria.msg | int | abs  }}m"
-    backup: yes
-  notify: Restart ElasticSearch
-
-- name: Alterando memoria do JAVA XMX
-  replace:
-    path: /etc/elasticsearch/jvm.options
-    regexp: '^-Xmx1g'
-    replace: "-Xmx{{ memoria.msg | int | abs }}m"
-    backup: yes
-  notify: Restart ElasticSearch
 
 - name: Desabilitando a SWAP
   shell: "swapoff -a"
@@ -97,6 +82,22 @@
     src: ./files/default_elasticsearch
     dest: /etc/default/elasticsearch
 
+- name: Alterando memoria do JAVA XMS
+  replace:
+    path: /etc/elasticsearch/jvm.options
+    regexp: '^-Xms1g'
+    replace: "-Xms{{ memoria.msg | int | abs  }}m"
+    backup: yes
+  notify: Restart ElasticSearch
+
+- name: Alterando memoria do JAVA XMX
+  replace:
+    path: /etc/elasticsearch/jvm.options
+    regexp: '^-Xmx1g'
+    replace: "-Xmx{{ memoria.msg | int | abs }}m"
+    backup: yes
+  notify: Restart ElasticSearch
+
 - name: Ensure directory exists for local self-signed TLS certs.
   file:
     path: /etc/ssl/{{ ansible_fqdn }}
@@ -125,6 +126,11 @@
     csr_path: /etc/ssl/{{ ansible_fqdn }}/{{ ansible_fqdn }}.csr
     provider: selfsigned
 
+- name: Habilitando Kibana
+  systemd:
+    name: kibana
+    state: started
+
 - name: habilitando firewall 
   firewalld:
     port: "{{item}}"
@@ -136,3 +142,4 @@
   notify: Restart Firewalld
   ignore_errors: true
 
+- include: install_metrics.yml
