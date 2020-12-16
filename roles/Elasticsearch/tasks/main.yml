@@ -157,4 +157,4 @@
   when: ansible_distribution == "centos"
 
 - include: install_metrics_Anazon_linux.yml
-  when: ansible_distribution == "centos"
+  when: ansible_distribution == "Amazon"

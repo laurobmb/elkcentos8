@@ -1,0 +1,10 @@
+---
+
+- name: install packages
+  shell: yum install -y logstash.x86_64
+
+- name: install packages
+  shell: yum install -y bash-completion
+
+- name: install packages
+  shell: yum install -y vim

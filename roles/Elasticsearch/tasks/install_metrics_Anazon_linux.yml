@@ -1,16 +1,19 @@
 ---
 
+- name: Stopping elasticsearch
+  shell: systemctl stop elasticsearch.service
+
 - name: Install metrics
-  shell: yum install -y metrics
+  shell: yum install -y metricbeat
 
 - name: Start metrics
-  shell: systemctl start metrics
+  shell: systemctl start metricbeat
 
 - name: Active monitoring elastic
   shell: metricbeat modules enable elasticsearch-xpack
 
-- name: Start metrics
-  shell: systemctl restart metrics
+- name: Start and enable metrics
+  shell: systemctl restart metricbeat && systemctl enable metricbeat
 
-- name: Start metrics
-  shell: systemctl enable metrics
+- name: Starting elasticsearch
+  shell: systemctl restart elasticsearch.service

@@ -2,6 +2,7 @@
 
 - name: Selinux config NGINX
   shell: "setsebool -P httpd_can_network_connect 1"
+  ignore_errors: True
 
 - name: Trocando nome da instancia  
   hostname:
@@ -21,12 +22,18 @@
   yum:
     name: epel-release
     state: latest
+  when: ansible_distribution == "centos"
 
 - name: Instalação de pacotes para o KIBANA
   package: 
     name: "{{item}}"
     state: latest
   with_items: "{{packages}}"
+  when: ansible_distribution == "centos"
+
+- name: Install packages in Amazon Linux 
+  include: install_package_Amazon_linux.yml
+  when: ansible_distribution == "Amazon"
 
 - name: Instalando PIPs
   pip:
@@ -110,6 +117,10 @@
     - 443/tcp
   notify: Restart Firewalld
   ignore_errors: true
+
+- name: Install packages in Amazon Linux 
+  include: service_Amazon_linux.yml
+  when: ansible_distribution == "Amazon"
 
 - name: setup dashboad metricbeat
   shell: metricbeat setup --dashboards -E setup.kibana.host={{ansible_default_ipv4.address}}:5601

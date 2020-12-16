@@ -1,19 +1,23 @@
 ---
+- name: Trocando nome da instancia master 
+  hostname:
+    name: logstash
 
 - name: importando key
   rpm_key:
     state: present
     key: https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
-- name: install java
-  package:
-    name: java-1.8.0-openjdk
-    state: present
-
 - name: Copiando repositorio logstash.repo
   copy:
     src: ../files/logstash.repo
     dest: /etc/yum.repos.d/     
+
+- name: install java
+  package:
+    name: java-1.8.0-openjdk
+    state: present
+  when: ansible_distribution == "centos"
 
 - name: install packages
   package:
@@ -21,5 +25,15 @@
     state: latest
   notify: Restart Logstash
   with_items: "{{packages}}"
+  when: ansible_distribution == "centos"
 
+- name: Copy file configuration for input http
+  template:
+    src: ./files/input_http.conf
+    dest: /etc/logstash/conf.d/httpbeat.conf
 
+- include: install_packages_Amazon_linux.yml
+  when: ansible_distribution == "Amazon"
+
+- include: service_Amazon_linux.yml
+  when: ansible_distribution == "Amazon"

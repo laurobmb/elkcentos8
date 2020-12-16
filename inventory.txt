@@ -7,10 +7,10 @@ elastic_002 ansible_host=172.1.31.238
 elastic
 
 [logstach_server]
-logstach_001 ansible_host=172.1.12.85
+logstach_001 ansible_host=172.1.32.171
 
 [kibana_server]
-kibanna_server ansible_host=172.2.31.154
+kibanna_server ansible_host=172.1.22.182
 
 [monitoring_clients]
 client_001 ansible_host=172.2.31.150

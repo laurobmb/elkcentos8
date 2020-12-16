@@ -1,0 +1,31 @@
+---
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: amazon-linux-extras install -y epel
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "java"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "kibana"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "vim"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: sudo amazon-linux-extras install -y nginx1
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "metricbeat"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "heartbeat-elastic"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "filebeat"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "auditbeat"          
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "rsync"
+

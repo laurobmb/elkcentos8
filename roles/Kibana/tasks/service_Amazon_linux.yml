@@ -1,0 +1,11 @@
+---
+
+- name: starting service kibana
+  shell: systemctl restart kibana && systemctl enable kibana
+
+- name: starting service metricbeat
+  shell: systemctl restart metricbeat.service && systemctl enable metricbeat.service
+
+- name: starting service auditbeat
+  shell: systemctl restart auditbeat.service && systemctl enable auditbeat.service
+
