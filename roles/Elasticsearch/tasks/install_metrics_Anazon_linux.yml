@@ -1,0 +1,16 @@
+---
+
+- name: Install metrics
+  shell: yum install -y metrics
+
+- name: Start metrics
+  shell: systemctl start metrics
+
+- name: Active monitoring elastic
+  shell: metricbeat modules enable elasticsearch-xpack
+
+- name: Start metrics
+  shell: systemctl restart metrics
+
+- name: Start metrics
+  shell: systemctl enable metrics

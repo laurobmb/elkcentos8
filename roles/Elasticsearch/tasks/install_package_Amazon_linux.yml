@@ -1,0 +1,18 @@
+---
+- name: Instalação de repositorio EPEL in AMAZON LINUX
+  shell: amazon-linux-extras install -y epel
+
+- name: Instalação de repositorio EPEL in AMAZON LINUX
+  shell: yum install -y epel-release
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "elasticsearch"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "vim"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "bash-completion"
+
+- name: Instalação de pacotes para o ELASTICSEARCH in AMAZON LINUX  
+  shell: yum install -y "java-11-amazon-corretto.x86_64"

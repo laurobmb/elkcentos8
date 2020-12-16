@@ -1,8 +1,8 @@
 ---
 domain: conectado.local
 cluster_name: BlackTeam001
-ELASTIC_MASTER: "172.2.31.9"
-ELASTIC_SLAVE:  "172.2.31.78"
+ELASTIC_MASTER: "172.1.31.170"
+ELASTIC_SLAVE:  "172.1.31.238"
 
 users:
   - { user: admin, password: 1q2w3e }
